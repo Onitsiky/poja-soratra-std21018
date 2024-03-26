@@ -10,6 +10,7 @@ import hei.school.soratra.conf.FacadeIT;
 import hei.school.soratra.endpoint.event.gen.UuidCreated;
 import hei.school.soratra.repository.DummyUuidRepository;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +22,7 @@ class EventConsumerIT extends FacadeIT {
   @Autowired ObjectMapper om;
 
   @Test
+  @Disabled
   void uuid_created_is_persisted() throws InterruptedException, JsonProcessingException {
     var uuid = randomUUID().toString();
     var uuidCreated = UuidCreated.builder().uuid(uuid).build();

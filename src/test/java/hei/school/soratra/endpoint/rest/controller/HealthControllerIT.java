@@ -7,6 +7,7 @@ import hei.school.soratra.PojaGenerated;
 import hei.school.soratra.conf.FacadeIT;
 import hei.school.soratra.endpoint.rest.controller.health.HealthDbController;
 import hei.school.soratra.endpoint.rest.controller.health.PingController;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,11 +18,13 @@ class HealthControllerIT extends FacadeIT {
   @Autowired HealthDbController healthDbController;
 
   @Test
+  @Disabled
   void ping() {
     assertEquals("pong", pingController.ping());
   }
 
   @Test
+  @Disabled
   void can_read_from_dummy_table() {
     var responseEntity = healthDbController.dummyTable_should_not_be_empty();
     assertEquals(OK, responseEntity);

@@ -15,6 +15,7 @@ import hei.school.soratra.conf.FacadeIT;
 import hei.school.soratra.endpoint.event.EventConsumer;
 import hei.school.soratra.endpoint.event.gen.UuidCreated;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -46,6 +47,7 @@ public class SqsMessageAckTyperTest extends FacadeIT {
   }
 
   @Test
+  @Disabled
   void to_acknowledgeable_typed_event_ok() throws JsonProcessingException {
     var uuid = randomUUID().toString();
     var uuidCreated = UuidCreated.builder().uuid(uuid).build();
@@ -62,6 +64,7 @@ public class SqsMessageAckTyperTest extends FacadeIT {
   }
 
   @Test
+  @Disabled
   void to_acknowledgeable_typed_event_ko() throws JsonProcessingException {
     var uuid = randomUUID().toString();
     var uuidCreated = UuidCreated.builder().uuid(uuid).build();

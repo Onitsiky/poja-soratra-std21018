@@ -4,6 +4,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import hei.school.soratra.endpoint.rest.model.Soratra;
 import hei.school.soratra.file.BucketComponent;
+import hei.school.soratra.repository.SoratraRepository;
+import jakarta.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SoratraService {
   private final BucketComponent bucketComponent;
+  private final SoratraRepository repository;
   private static final String ORIGINAL_FILE_PREFIX = "original_";
   private static final String TRANSFORMED_FILE_PREFIX = "transformed_";
   private static final String FILE_EXTENSION = ".txt";
@@ -30,14 +33,22 @@ public class SoratraService {
     String transformedFilePath = TRANSFORMED_FILE_PREFIX + tranformedFile.getName();
     bucketComponent.upload(originalFile, originalFilePath);
     bucketComponent.upload(tranformedFile, transformedFilePath);
+    hei.school.soratra.repository.model.Soratra toSave =
+        new hei.school.soratra.repository.model.Soratra(id, originalFilePath, transformedFilePath);
+    repository.save(toSave);
   }
 
   public Soratra getFileUrls(String id) {
-    String originalFileKey = ORIGINAL_FILE_PREFIX + id + FILE_EXTENSION;
-    String transformedFileKey = TRANSFORMED_FILE_PREFIX + id + FILE_EXTENSION;
+    hei.school.soratra.repository.model.Soratra actual = getObjectById(id);
+    String originalFileKey = actual.getOriginalKey();
+    String transformedFileKey = actual.getTransformedKey();
     String originalUrl = getPresignedURL(originalFileKey, PRESIGNED_URL_DURATION_IN_SECONDS);
     String transformedUrl = getPresignedURL(transformedFileKey, PRESIGNED_URL_DURATION_IN_SECONDS);
     return new Soratra(originalUrl, transformedUrl);
+  }
+
+  private hei.school.soratra.repository.model.Soratra getObjectById(String id) {
+    return repository.findById(id).orElseThrow(NotFoundException::new);
   }
 
   private File createAndWriteInputInFile(String id, String input) throws IOException {

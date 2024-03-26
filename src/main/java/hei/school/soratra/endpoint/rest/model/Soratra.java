@@ -10,6 +10,6 @@ import lombok.ToString;
 @Builder
 @ToString
 public class Soratra {
-  private String originalUrl;
+  private String original_url;
   private String transformed_url;
 }
